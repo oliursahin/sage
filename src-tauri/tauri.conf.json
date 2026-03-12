@@ -1,0 +1,35 @@
+{
+  "$schema": "https://raw.githubusercontent.com/nicedoc/tauri-config/main/schema.json",
+  "productName": "miniconductor",
+  "version": "0.1.0",
+  "identifier": "com.miniconductor.app",
+  "build": {
+    "frontendDist": "../app/dist",
+    "devUrl": "http://localhost:5173",
+    "beforeDevCommand": "cd app && npm run dev",
+    "beforeBuildCommand": "cd app && npm run build"
+  },
+  "app": {
+    "windows": [
+      {
+        "title": "miniconductor",
+        "width": 960,
+        "height": 640,
+        "resizable": true,
+        "decorations": true
+      }
+    ]
+  },
+  "plugins": {
+    "shell": {
+      "open": true
+    }
+  },
+  "bundle": {
+    "active": true,
+    "targets": "all",
+    "icon": [
+      "icons/icon.png"
+    ]
+  }
+}

@@ -66,6 +66,17 @@ async function main(): Promise<void> {
       }
       if (fs.existsSync(agent.logFile)) {
         const log = fs.readFileSync(agent.logFile, 'utf-8');
+
+        if (args.includes('--json')) {
+          const events: any[] = [];
+          for (const line of log.split('\n')) {
+            if (!line.trim()) continue;
+            try { events.push(JSON.parse(line)); } catch {}
+          }
+          console.log(JSON.stringify(events));
+          break;
+        }
+
         // Parse JSONL and print text content
         for (const line of log.split('\n')) {
           if (!line.trim()) continue;
@@ -90,6 +101,10 @@ async function main(): Promise<void> {
           }
         }
       } else {
+        if (args.includes('--json')) {
+          console.log(JSON.stringify([]));
+          break;
+        }
         console.log('No log file yet.');
       }
       break;
@@ -170,12 +185,22 @@ async function main(): Promise<void> {
 
     case 'status':
     case undefined: {
-      // Render TUI dashboard
       const repoRoot = findRepoRoot();
       const state = loadState(repoRoot);
       if (!state || state.agents.length === 0) {
-        console.log('miniconductor — no agents running');
-        console.log('Run `mcon spawn "task"` to start one.');
+        if (args.includes('--json')) {
+          console.log(JSON.stringify({ repoRoot, baseBranch: '', agents: [] }));
+        } else {
+          console.log('miniconductor — no agents running');
+          console.log('Run `mcon spawn "task"` to start one.');
+        }
+        break;
+      }
+
+      refreshStatuses(state);
+
+      if (args.includes('--json')) {
+        console.log(JSON.stringify(state));
         break;
       }
 
