@@ -173,3 +173,11 @@ dist
 
 # Finder (MacOS) folder config
 .DS_Store
+
+# Tauri
+src-tauri/target/
+src-tauri/gen/
+
+# App build output
+app/dist/
+app/node_modules/
